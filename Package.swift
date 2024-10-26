@@ -39,7 +39,6 @@ let package = Package(
 
 if isDevelop {
     package.dependencies.append(contentsOf: [
-        .package(url: "https://github.com/apple/swift-testing", exact: "0.3.0"),
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.10.0"),
     ])
     if isObjcAvailable {
@@ -53,7 +52,6 @@ if isDevelop {
         name: "StubNetworkKitTests",
         dependencies: [
             "StubNetworkKit",
-            .product(name: "Testing", package: "swift-testing"),
             "Alamofire",
         ],
         resources: [.copy("_Fixtures")]
@@ -63,6 +61,14 @@ if isDevelop {
             "APIKit",
         ])
     }
+    #if compiler(<6.0)
+        package.dependencies.append(contentsOf: [
+            .package(url: "https://github.com/apple/swift-testing", exact: "0.3.0"),
+        ])
+        testTarget.dependencies.append(contentsOf: [
+            .product(name: "Testing", package: "swift-testing"),
+        ])
+    #endif
     package.targets.append(testTarget)
 
     if isObjcAvailable {
