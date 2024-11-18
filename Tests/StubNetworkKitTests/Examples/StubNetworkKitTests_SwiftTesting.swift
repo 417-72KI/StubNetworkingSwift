@@ -5,7 +5,11 @@ import FoundationNetworking
 import Testing
 import StubNetworkKit
 
+#if compiler(<6.0)
 @Suite
+#else
+@Suite(.serialized)
+#endif
 final class StubNetworkKitTests_SwiftTesting {
     init() {
         StubNetworking.option(printDebugLog: true,
